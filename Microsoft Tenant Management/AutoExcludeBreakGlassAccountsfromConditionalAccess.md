@@ -10,7 +10,7 @@ Having your break glass accounts be part of an exclusion group which is EXCLUDED
 
 3 - On the screen, copy the contents from step #1 and PASTE into the table, replacing all data.
 
-![](https://github.com/ShadowITServices/Microsoft365/Documentation/Images/uploadtemplate.png)
+![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/uploadtemplate.png)
 
 4 - Hit Save and deploy.
 
@@ -52,11 +52,11 @@ foreach ($miObjectID in $miObjectIDs) {
 
 1. Set your recurrencr of the logic app. Suggested 1-5m.
 
-![](httpsgithub.comShadowITServicesMicrosoft365DocumentationImagesautocaprecur.png)
+![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/autocaprecur.png)
 
 2. Configure your endpoint based off what graph environment you are working with.
 
-![](httpsgithub.comShadowITServicesMicrosoft365DocumentationImagesautocapgetcond.png)
+![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/autocapgetcond.png)
 
 Graph endpoints for Step2 are below
 
@@ -93,11 +93,11 @@ GCCH Audience = httpsgraph.microsoft.us
 
 Excluded group now added to the CAP
 
-![](httpsgithub.comShadowITServicesMicrosoft365DocumentationImagesautocapproof.png)
+![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/autocapproof.png)
 
 Email sent to DLs in the logic app
 
-![](httpsgithub.comShadowITServicesMicrosoft365DocumentationImagessendemailproof.png)
+![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/autocapsendemailproof.png)
 
 ## Monitoring & Alerting of the automation
 
