@@ -104,7 +104,7 @@ GCCH Audience = httpsgraph.microsoft.us
 
 Excluded group now added to the CAP
 
-![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/autocapproof.png)
+
 
 Email sent to DLs in the logic app
 
