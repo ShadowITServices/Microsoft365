@@ -85,7 +85,7 @@ GCCH Audience = httpsgraph.microsoft.us
 3. Configure the SEND MAIL (POST) and what graph endpoint you need to use. 
 The first arrow can and should be a DL email. The second arrow can and should be another DL of one or more.
 
-![](httpsgithub.comShadowITServicesMicrosoft365DocumentationImagesautocapgetcond.png)
+![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/autocapemail.png)
 
 Graph endpoints for Step3 are below
 
