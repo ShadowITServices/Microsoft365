@@ -1,8 +1,19 @@
 ## Automatically Exclude BreakGlass Group From Conditional Access ##
 
-Having your break glass accounts be part of an exclusion group which is EXCLUDED from conditional access policy is a pivotal piece to your Zero Trust Identity plane, for two simple reasons. This allows the identity team to gain access back into a tenant if someone were to configure a mistake and break AuthZAuthN to the tenant. As well as if a threat actor has taken over and removed the exclusions from the policies. You are at mercy of the recurrence and I would suggest this run, every 1-5m in corporate orgs.
+If you're planning to implement the Essential Eight strategies using the ASD Blueprint for Secure Cloud, adopting this solution is highly recommended. Including emergency access accounts in a group that's exempt from conditional access policies is a critical step. This ensures that your Zero Trust Identity framework remains robust, allowing the identity team to restore access in case of misconfigurations or security breaches. This practice aligns with the principles of the Essential Eight and enhances your organization's security posture, particularly within the context of the ASD Blueprint for Secure Cloud. Regular checks, preferably every 1 to 5 minutes, are advised to maintain this security measure effectively in corporate environments.
 
-## Deploy the logic app
+## Reference Materials & Constraints ##
+
+This solution is adopting the Microsoft Conditional Access blade within Entra ID, therefore you will require one of the following licenses:
+
+- Microsoft 365 Business Premium
+- Microsoft 365 Frontline F1/F3
+- Microsoft 365 Education A3/A5
+- Microsoft 365 Enterprise E3/E5
+
+[Configuring BreakGlass Accounts per ASD//ACSC](https://blueprint.asd.gov.au/configuration/entra-id/users/break-glass-accounts/)
+
+## Deploy the logic app ##
 
 1 - [AutoCAPExclude](httpsgithub.comShadowITServicesMicrosoft365MicrosoftTenantManagementAutoExcludeBreakGlassAccountsfromConditionalAccess.json). Copy the RAW contents and upload into the template of the logic app.
 
@@ -89,7 +100,7 @@ GCCH URI = httpsgraph.microsoft.usv1.0usersEMAILADDRESSsendmail
 GCCH Audience = httpsgraph.microsoft.us
 ```
 
-## Run logic app and test (make sure the exclusion group is not part of a conditional access to test)
+## Run logic app and test ##
 
 Excluded group now added to the CAP
 
@@ -99,7 +110,7 @@ Email sent to DLs in the logic app
 
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/autocapsendemailproof.png)
 
-## Monitoring & Alerting of the automation
+## Monitoring & Alerting of the automation ##
 
 1. On the logic app, click  Diagnostic Settings and send to the preferred Log Analytics Workspace.
 
