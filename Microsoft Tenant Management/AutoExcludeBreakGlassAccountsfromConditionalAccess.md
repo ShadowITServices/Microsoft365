@@ -10,7 +10,7 @@ Having your break glass accounts be part of an exclusion group which is EXCLUDED
 
 3 - On the screen, copy the contents from step #1 and PASTE into the table, replacing all data.
 
-[[![](httpsgithub.comShadowITServicesblobmainMicrosoft365DocumentationImagesuploadtemplate.png)]](https://github.com/ShadowITServices/Microsoft365/blob/14bd0f31fbe16a3fda3e5b4407404dc7d2dce19a/Documentation/Images/uploadtemplate.png)
+![(httpsgithub.comShadowITServicesblobmainMicrosoft365DocumentationImagesuploadtemplate.png)]
 
 4 - Hit Save and deploy.
 
