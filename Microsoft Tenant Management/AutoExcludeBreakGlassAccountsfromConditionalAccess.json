@@ -1,0 +1,374 @@
+{
+    "$schema":  "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion":  "1.0.0.0",
+    "metadata":  {
+        "title":  "",
+        "description":  "",
+        "prerequisites":  "",
+        "postDeployment":  [
+        ],
+        "prerequisitesDeployTemplateFile":  "",
+        "lastUpdateTime":  "",
+        "entities":  [
+        ],
+        "tags":  [
+        ],
+        "support":  {
+            "tier":  "community",
+            "armtemplate":  "Generated from https://github.com/Azure/Azure-Sentinel/tree/master/Tools/Playbook-ARM-Template-Generator"
+        },
+        "author":  {
+            "name":  ""
+        }
+    },
+    "parameters":  {
+        "PlaybookName":  {
+            "defaultValue":  "AutoCAPExclude",
+            "type":  "string"
+        },
+        "EmergencyAccountsGroupObjectID":  {
+            "type":  "string",
+            "metadata":  {
+                "description":  "Enter value for EmergencyAccountsGroupObjectID"
+            }
+        }
+    },
+    "variables":  {
+    },
+    "resources":  [
+        {
+            "properties":  {
+                "provisioningState":  "Succeeded",
+                "state":  "Enabled",
+                "definition":  {
+                    "$schema":  "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion":  "1.0.0.0",
+                    "parameters":  {
+                        "EmergencyAccountsGroupObjectID":  {
+                            "defaultValue":  "[parameters('EmergencyAccountsGroupObjectID')]",
+                            "type":  "string"
+                        }
+                    },
+                    "triggers":  {
+                        "Schedule_automation_of_emergency_account_management_within_conditional_access":  {
+                            "recurrence":  {
+                                "frequency":  "Hour",
+                                "interval":  1
+                            },
+                            "evaluatedRecurrence":  {
+                                "frequency":  "Hour",
+                                "interval":  1
+                            },
+                            "type":  "Recurrence"
+                        }
+                    },
+                    "actions":  {
+                        "For_each_conditional_access_policy":  {
+                            "foreach":  "@body('Parse_All_Conditional_Access_Policies')?['value']",
+                            "actions":  {
+                                "Check_if_a_conditional_access_policy_has_exclusion_for_emergency_accounts":  {
+                                    "actions":  {
+                                    },
+                                    "runAfter":  {
+                                    },
+                                    "else":  {
+                                        "actions":  {
+                                            "Check_if_the_conditional_access_policy_was_updated_successfully":  {
+                                                "actions":  {
+                                                    "HTTP":  {
+                                                        "runAfter":  {
+                                                        },
+                                                        "type":  "Http",
+                                                        "inputs":  {
+                                                            "authentication":  {
+                                                                "audience":  "https://graph.microsoft.com",
+                                                                "type":  "ManagedServiceIdentity"
+                                                            },
+                                                            "body":  {
+                                                                "message":  {
+                                                                    "body":  {
+                                                                        "content":  "Type: Conditional Access\u003cbr\u003ePolicy Name: @{items('For_each_conditional_access_policy')?['displayName']}\u003cbr\u003ePolicy ID: @{items('For_each_conditional_access_policy')?['id']}\u003cbr\u003ePolicyState: @{items('For_each_conditional_access_policy')?['state']}",
+                                                                        "contentType":  "html"
+                                                                    },
+                                                                    "subject":  "Policy missing emergency account was remediated successfully. NO ACTION REQUIRED",
+                                                                    "toRecipients":  [
+                                                                        {
+                                                                            "emailAddress":  {
+                                                                                "address":  "beau.dean@shadowit.com.au"
+                                                                            }
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "saveToSentItems":  "false"
+                                                            },
+                                                            "method":  "POST",
+                                                            "uri":  "https://graph.microsoft.com/v1.0/users/identitynotify@cranesmeadows.com/sendmail"
+                                                        }
+                                                    }
+                                                },
+                                                "runAfter":  {
+                                                    "Exclude_emergency_accounts_within_conditional_access_policies":  [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "else":  {
+                                                    "actions":  {
+                                                        "HTTP_2":  {
+                                                            "runAfter":  {
+                                                            },
+                                                            "type":  "Http",
+                                                            "inputs":  {
+                                                                "authentication":  {
+                                                                    "audience":  "https://graph.microsoft.com",
+                                                                    "type":  "ManagedServiceIdentity"
+                                                                },
+                                                                "body":  {
+                                                                    "message":  {
+                                                                        "body":  {
+                                                                            "content":  "@{outputs('Exclude_emergency_accounts_within_conditional_access_policies')['statusCode']}",
+                                                                            "contentType":  "text"
+                                                                        },
+                                                                        "subject":  "Policy missing emergency account was NOT remediated successfully. ACTION REQUIRED",
+                                                                        "toRecipients":  [
+                                                                            {
+                                                                                "emailAddress":  {
+                                                                                    "address":  "beau.dean@shadowit.com.au"
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "saveToSentItems":  "false"
+                                                                },
+                                                                "method":  "POST",
+                                                                "uri":  "https://graph.microsoft.com/v1.0/users/identitynotify@cranesmeadows.com/sendmail"
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "expression":  {
+                                                    "and":  [
+                                                        {
+                                                            "equals":  [
+                                                                "@outputs('Exclude_emergency_accounts_within_conditional_access_policies')['statusCode']",
+                                                                204
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                "type":  "If"
+                                            },
+                                            "Exclude_emergency_accounts_within_conditional_access_policies":  {
+                                                "runAfter":  {
+                                                },
+                                                "type":  "Http",
+                                                "inputs":  {
+                                                    "authentication":  {
+                                                        "audience":  "https://graph.microsoft.com",
+                                                        "type":  "ManagedServiceIdentity"
+                                                    },
+                                                    "body":  {
+                                                        "conditions":  {
+                                                            "users":  {
+                                                                "excludeGroups":  [
+                                                                    "@{parameters('EmergencyAccountsGroupObjectID')}"
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "headers":  {
+                                                        "Content-Type":  "application/json"
+                                                    },
+                                                    "method":  "PATCH",
+                                                    "uri":  "https://graph.microsoft.com/v1.0/identity/conditionalAccess/policies/@{items('For_each_Conditional_Access_Policy')?['id']}"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "expression":  {
+                                        "and":  [
+                                            {
+                                                "contains":  [
+                                                    "@item()?['conditions']?['users']?['excludeGroups']",
+                                                    "@parameters('EmergencyAccountsGroupObjectID')"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "type":  "If"
+                                }
+                            },
+                            "runAfter":  {
+                                "Parse_all_conditional_access_policies":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "Foreach"
+                        },
+                        "GET_all_conditional_access_policies_":  {
+                            "runAfter":  {
+                            },
+                            "type":  "Http",
+                            "inputs":  {
+                                "authentication":  {
+                                    "audience":  "https://graph.microsoft.com",
+                                    "type":  "ManagedServiceIdentity"
+                                },
+                                "method":  "GET",
+                                "uri":  "https://graph.microsoft.com/v1.0/identity/conditionalAccess/policies"
+                            }
+                        },
+                        "Parse_all_conditional_access_policies":  {
+                            "runAfter":  {
+                                "GET_all_conditional_access_policies_":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "ParseJson",
+                            "inputs":  {
+                                "content":  "@body('GET_all_conditional_access_policies_')",
+                                "schema":  {
+                                    "properties":  {
+                                        "@@odata.context":  {
+                                            "type":  "string"
+                                        },
+                                        "value":  {
+                                            "items":  {
+                                                "properties":  {
+                                                    "conditions":  {
+                                                        "properties":  {
+                                                            "applications":  {
+                                                                "properties":  {
+                                                                    "excludeApplications":  {
+                                                                        "type":  "array"
+                                                                    },
+                                                                    "includeApplications":  {
+                                                                        "items":  {
+                                                                            "type":  "string"
+                                                                        },
+                                                                        "type":  "array"
+                                                                    },
+                                                                    "includeUserActions":  {
+                                                                        "type":  "array"
+                                                                    }
+                                                                },
+                                                                "type":  "object"
+                                                            },
+                                                            "clientAppTypes":  {
+                                                                "type":  "array"
+                                                            },
+                                                            "deviceStates":  {
+                                                            },
+                                                            "locations":  {
+                                                            },
+                                                            "platforms":  {
+                                                            },
+                                                            "signInRiskLevels":  {
+                                                                "type":  "array"
+                                                            },
+                                                            "users":  {
+                                                                "properties":  {
+                                                                    "excludeGroups":  {
+                                                                        "type":  "array"
+                                                                    },
+                                                                    "excludeRoles":  {
+                                                                        "type":  "array"
+                                                                    },
+                                                                    "excludeUsers":  {
+                                                                        "type":  "array"
+                                                                    },
+                                                                    "includeGroups":  {
+                                                                        "type":  "array"
+                                                                    },
+                                                                    "includeRoles":  {
+                                                                        "type":  "array"
+                                                                    },
+                                                                    "includeUsers":  {
+                                                                        "items":  {
+                                                                            "type":  "string"
+                                                                        },
+                                                                        "type":  "array"
+                                                                    }
+                                                                },
+                                                                "type":  "object"
+                                                            }
+                                                        },
+                                                        "type":  "object"
+                                                    },
+                                                    "createdDateTime":  {
+                                                    },
+                                                    "displayName":  {
+                                                        "type":  "string"
+                                                    },
+                                                    "grantControls":  {
+                                                        "properties":  {
+                                                            "builtInControls":  {
+                                                                "items":  {
+                                                                    "type":  "string"
+                                                                },
+                                                                "type":  "array"
+                                                            },
+                                                            "customAuthenticationFactors":  {
+                                                                "type":  "array"
+                                                            },
+                                                            "operator":  {
+                                                                "type":  "string"
+                                                            },
+                                                            "termsOfUse":  {
+                                                                "type":  "array"
+                                                            }
+                                                        },
+                                                        "type":  [
+                                                            "object",
+                                                            "null"
+                                                        ]
+                                                    },
+                                                    "id":  {
+                                                        "type":  "string"
+                                                    },
+                                                    "modifiedDateTime":  {
+                                                        "type":  [
+                                                            "string",
+                                                            "null"
+                                                        ]
+                                                    },
+                                                    "sessionControls":  {
+                                                    },
+                                                    "state":  {
+                                                        "type":  "string"
+                                                    }
+                                                },
+                                                "required":  [
+                                                    "id"
+                                                ],
+                                                "type":  "object"
+                                            },
+                                            "type":  "array"
+                                        }
+                                    },
+                                    "type":  "object"
+                                }
+                            }
+                        }
+                    },
+                    "outputs":  {
+                    }
+                },
+                "parameters":  {
+                }
+            },
+            "name":  "[parameters('PlaybookName')]",
+            "type":  "Microsoft.Logic/workflows",
+            "location":  "[resourceGroup().location]",
+            "tags":  {
+                "hidden-SentinelTemplateName":  "AutoCAPExclude",
+                "hidden-SentinelTemplateVersion":  "1.0"
+            },
+            "identity":  {
+                "type":  "SystemAssigned"
+            },
+            "apiVersion":  "2017-07-01",
+            "dependsOn":  [
+            ]
+        }
+    ]
+}

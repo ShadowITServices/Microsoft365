@@ -1,0 +1,271 @@
+{
+    "$schema":  "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion":  "1.0.0.0",
+    "metadata":  {
+        "title":  "",
+        "description":  "",
+        "prerequisites":  "",
+        "postDeployment":  [
+        ],
+        "prerequisitesDeployTemplateFile":  "",
+        "lastUpdateTime":  "",
+        "entities":  [
+        ],
+        "tags":  [
+        ],
+        "support":  {
+            "tier":  "community",
+            "armtemplate":  "Generated from https://github.com/Azure/Azure-Sentinel/tree/master/Tools/Playbook-ARM-Template-Generator"
+        },
+        "author":  {
+            "name":  ""
+        }
+    },
+    "parameters":  {
+        "PlaybookName":  {
+            "defaultValue":  "YellowPages",
+            "type":  "string"
+        }
+    },
+    "variables":  {
+        "AzureloganalyticsdatacollectorConnectionName":  "[concat('Azureloganalyticsdatacollector-', parameters('PlaybookName'))]"
+    },
+    "resources":  [
+        {
+            "properties":  {
+                "provisioningState":  "Succeeded",
+                "state":  "Enabled",
+                "definition":  {
+                    "$schema":  "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion":  "1.0.0.0",
+                    "parameters":  {
+                        "$connections":  {
+                            "defaultValue":  {
+                            },
+                            "type":  "Object"
+                        }
+                    },
+                    "triggers":  {
+                        "Recurrence":  {
+                            "recurrence":  {
+                                "frequency":  "Day",
+                                "interval":  1
+                            },
+                            "evaluatedRecurrence":  {
+                                "frequency":  "Day",
+                                "interval":  1
+                            },
+                            "type":  "Recurrence"
+                        }
+                    },
+                    "actions":  {
+                        "AuthN_Methods_SEND":  {
+                            "runAfter":  {
+                                "GET_AuthN_Methods":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "ApiConnection",
+                            "inputs":  {
+                                "body":  "@{body('GET_AuthN_Methods')}",
+                                "headers":  {
+                                    "Log-Type":  "@variables('LaCustomTableName')"
+                                },
+                                "host":  {
+                                    "connection":  {
+                                        "name":  "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                                    }
+                                },
+                                "method":  "post",
+                                "path":  "/api/logs"
+                            }
+                        },
+                        "Domains_SEND":  {
+                            "runAfter":  {
+                                "GET_Domains":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "ApiConnection",
+                            "inputs":  {
+                                "body":  "@{body('GET_Domains')}",
+                                "headers":  {
+                                    "Log-Type":  "@variables('LaCustomTableName')"
+                                },
+                                "host":  {
+                                    "connection":  {
+                                        "name":  "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                                    }
+                                },
+                                "method":  "post",
+                                "path":  "/api/logs"
+                            }
+                        },
+                        "GET_AuthN_Methods":  {
+                            "runAfter":  {
+                                "Initialize_variable_for_custom_table_name":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "Http",
+                            "inputs":  {
+                                "authentication":  {
+                                    "audience":  "https://graph.microsoft.com",
+                                    "type":  "ManagedServiceIdentity"
+                                },
+                                "method":  "GET",
+                                "uri":  "https://graph.microsoft.com/v1.0/policies/authenticationMethodsPolicy"
+                            }
+                        },
+                        "GET_B2B-Partners":  {
+                            "runAfter":  {
+                                "Initialize_variable_for_custom_table_name":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "Http",
+                            "inputs":  {
+                                "authentication":  {
+                                    "audience":  "https://graph.microsoft.com",
+                                    "type":  "ManagedServiceIdentity"
+                                },
+                                "method":  "GET",
+                                "uri":  "https://graph.microsoft.com/v1.0/policies/crossTenantAccessPolicy/partners"
+                            }
+                        },
+                        "GET_Domains":  {
+                            "runAfter":  {
+                                "Initialize_variable_for_custom_table_name":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "Http",
+                            "inputs":  {
+                                "authentication":  {
+                                    "audience":  "https://graph.microsoft.com",
+                                    "type":  "ManagedServiceIdentity"
+                                },
+                                "method":  "GET",
+                                "uri":  "https://graph.microsoft.com/v1.0/domains"
+                            }
+                        },
+                        "GET_SKU":  {
+                            "runAfter":  {
+                                "Initialize_variable_for_custom_table_name":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "Http",
+                            "inputs":  {
+                                "authentication":  {
+                                    "audience":  "https://graph.microsoft.com",
+                                    "type":  "ManagedServiceIdentity"
+                                },
+                                "method":  "GET",
+                                "uri":  "https://graph.microsoft.com/v1.0/subscribedSkus"
+                            }
+                        },
+                        "Initialize_variable_for_custom_table_name":  {
+                            "runAfter":  {
+                            },
+                            "type":  "InitializeVariable",
+                            "inputs":  {
+                                "variables":  [
+                                    {
+                                        "name":  "LaCustomTableName",
+                                        "type":  "string",
+                                        "value":  "B2BFramework"
+                                    }
+                                ]
+                            }
+                        },
+                        "Partners_SEND":  {
+                            "runAfter":  {
+                                "GET_B2B-Partners":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "ApiConnection",
+                            "inputs":  {
+                                "body":  "@{body('GET_B2B-Partners')}",
+                                "headers":  {
+                                    "Log-Type":  "@variables('LaCustomTableName')"
+                                },
+                                "host":  {
+                                    "connection":  {
+                                        "name":  "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                                    }
+                                },
+                                "method":  "post",
+                                "path":  "/api/logs"
+                            }
+                        },
+                        "SKU_SEND":  {
+                            "runAfter":  {
+                                "GET_SKU":  [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type":  "ApiConnection",
+                            "inputs":  {
+                                "body":  "@{body('GET_SKU')}",
+                                "headers":  {
+                                    "Log-Type":  "@variables('LaCustomTableName')"
+                                },
+                                "host":  {
+                                    "connection":  {
+                                        "name":  "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                                    }
+                                },
+                                "method":  "post",
+                                "path":  "/api/logs"
+                            }
+                        }
+                    },
+                    "outputs":  {
+                    }
+                },
+                "parameters":  {
+                    "$connections":  {
+                        "value":  {
+                            "azureloganalyticsdatacollector":  {
+                                "connectionId":  "[resourceId('Microsoft.Web/connections', variables('AzureloganalyticsdatacollectorConnectionName'))]",
+                                "connectionName":  "[variables('AzureloganalyticsdatacollectorConnectionName')]",
+                                "id":  "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/Azureloganalyticsdatacollector')]"
+                            }
+                        }
+                    }
+                }
+            },
+            "name":  "[parameters('PlaybookName')]",
+            "type":  "Microsoft.Logic/workflows",
+            "location":  "[resourceGroup().location]",
+            "tags":  {
+                "hidden-SentinelTemplateName":  "YellowPages",
+                "hidden-SentinelTemplateVersion":  "1.0"
+            },
+            "identity":  {
+                "type":  "SystemAssigned"
+            },
+            "apiVersion":  "2017-07-01",
+            "dependsOn":  [
+                "[resourceId('Microsoft.Web/connections', variables('AzureloganalyticsdatacollectorConnectionName'))]"
+            ]
+        },
+        {
+            "type":  "Microsoft.Web/connections",
+            "apiVersion":  "2016-06-01",
+            "name":  "[variables('AzureloganalyticsdatacollectorConnectionName')]",
+            "location":  "[resourceGroup().location]",
+            "kind":  "V1",
+            "properties":  {
+                "displayName":  "[variables('AzureloganalyticsdatacollectorConnectionName')]",
+                "customParameterValues":  {
+                },
+                "api":  {
+                    "id":  "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/Azureloganalyticsdatacollector')]"
+                }
+            }
+        }
+    ]
+}
