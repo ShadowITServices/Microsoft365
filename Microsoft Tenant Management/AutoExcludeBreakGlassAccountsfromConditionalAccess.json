@@ -102,7 +102,7 @@
                                                                 "saveToSentItems":  "false"
                                                             },
                                                             "method":  "POST",
-                                                            "uri":  "https://graph.microsoft.com/v1.0/users/identitynotify@cranesmeadows.com/sendmail"
+                                                            "uri":  "https://graph.microsoft.com/v1.0/users/beau.dean@shadowit.com.au/sendmail"
                                                         }
                                                     }
                                                 },
@@ -140,7 +140,7 @@
                                                                     "saveToSentItems":  "false"
                                                                 },
                                                                 "method":  "POST",
-                                                                "uri":  "https://graph.microsoft.com/v1.0/users/identitynotify@cranesmeadows.com/sendmail"
+                                                                "uri":  "https://graph.microsoft.com/v1.0/users/beau.dean@shadowit.com.au/sendmail"
                                                             }
                                                         }
                                                     }
