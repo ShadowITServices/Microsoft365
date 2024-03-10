@@ -15,7 +15,7 @@ This solution is adopting the Microsoft Conditional Access blade within Entra ID
 
 ## Deploy the logic app ##
 
-1 - [[AutoCAPExclude](httpsgithub.comShadowITServicesMicrosoft365MicrosoftTenantManagementAutoExcludeBreakGlassAccountsfromConditionalAccess.json)]. Copy the RAW contents and upload into the template of the logic app.
+1 - [[[AutoCAPExclude](httpsgithub.comShadowITServicesMicrosoft365MicrosoftTenantManagementAutoExcludeBreakGlassAccountsfromConditionalAccess.json)]](https://github.com/ShadowITServices/Microsoft365/blob/ee56a31a525f2d8b82c2a17c34929f49d04c713f/Microsoft%20Tenant%20Management/AutoExcludeBreakGlassAccountsfromConditionalAccess.json). Copy the RAW contents and upload into the template of the logic app.
 
 2 - In Azure, natigave to 'Deploy A Custom Template' and chose 'Build your own template in the editor'
 
