@@ -15,25 +15,25 @@ This solution is adopting the Microsoft Conditional Access blade within Entra ID
 
 ## Deploy the logic app ##
 
-1 - [AutoCAPExclude](httpsgithub.comShadowITServicesMicrosoft365MicrosoftTenantManagementAutoExcludeBreakGlassAccountsfromConditionalAccess.json). Copy the RAW contents and upload into the template of the logic app.
+1 - [AutoCAPExclude](https://github.com/ShadowITServices/Microsoft365/blob/main/Microsoft%20Tenant%20Management/AutoExcludeBreakGlassAccountsfromConditionalAccess.json). Copy the RAW contents and upload into the template of the logic app.
 
-2 - In Azure, natigave to 'Deploy A Custom Template' and chose 'Build your own template in the editor'
+2 - In Azure, Navigate to Azure App Logic and provision a new App (and Azure Resource Group, if required.)
 
-3 - On the screen, copy the contents from step #1 and PASTE into the table, replacing all data.
+3 - On the screen, copy the contents from Step #1 and PASTE into the table, replacing all required data (Lines #97, #105, #135 & #143).
 
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/uploadtemplate.png)
 
 4 - Hit Save and deploy.
 
-## Pre-Configuration of the AutoCAPExclude Logic App
+## Pre-Configuration of the AutoCAPExclude Logic App ##
 
 1 - Turn on Managed Identity on the logic app.
 
 2 - On the Parameters Tab of the logic app, Enter the objectID of your Exclusion Group.
 
-3 - Save changes on the logic app.
+3 - Save changes on the Azure App Logic.
 
-## Open Azure PowerShell via the browser & Paste the below code
+## Open Azure PowerShell via the browser & Paste the below code ##
 
 ```
 
@@ -59,7 +59,7 @@ foreach ($miObjectID in $miObjectIDs) {
 }
 ```
 
-## Post-Configuration of the AutoCAPExclude Logic App
+## Post-Configuration of the AutoCAPExclude Logic App ##
 
 1. Set your recurrencr of the logic app. Suggested 1-5m.
 
@@ -82,12 +82,13 @@ GCCH URI = httpsgraph.microsoft.usv1.0identityconditionalAccesspolicies
 GCCH Audience = httpsgraph.microsoft.us
 ```
 
-3. Configure the SEND MAIL (POST) and what graph endpoint you need to use. 
+3. Configure the SEND MAIL (POST) and what graph endpoint you need to use.
+
 The first arrow can and should be a DL email. The second arrow can and should be another DL of one or more.
 
-![](httpsgithub.comShadowITServicesMicrosoft365DocumentationImagesautocapgetcond.png)
+![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/autocapemail.png)
 
-Graph endpoints for Step3 are below
+Graph Endpoints for Step 3 per below
 
 ```
 Commercial URL = httpsgraph.microsoft.comv1.0usersEMAILADDRESSsendmail
