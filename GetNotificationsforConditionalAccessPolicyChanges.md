@@ -1,4 +1,4 @@
-## Get notified off a Conditional Access Policy Change ##
+## Get notified when Conditional Access Policies Change ##
 
 Changes in the Conditional Access Policies can have a big impact to business operations and Conditional Access is responsible for granting and blocking access to cloud resources. By default, there is no option to get notified of CA policy changes. So, I decided to dig into the Audit logs and Graph API to get notifications, so you don’t have to log on to the Azure AD portal and check manually the log files. Also, you can inform the users without admin accounts like managers or a change manager so he/she can check if the change is registered and approved to execute.
 
