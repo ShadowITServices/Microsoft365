@@ -1,6 +1,6 @@
 ## Get notified off a Conditional Access Policy Change ##
 
-Changes in the Conditional Access Policies can have a big impact and Conditional Access is responsible for granting and blocking access to cloud resources. By default, there is no option to get notified of CA policy changes. So, I decided to dig into the Audit logs and Graph API to get notifications, so you don’t have to log on to the Azure AD portal and check manually the log files. Also, you can inform the users without admin accounts like managers or a change manager so he/she can check if the change is registered and approved to execute.
+Changes in the Conditional Access Policies can have a big impact to business operations and Conditional Access is responsible for granting and blocking access to cloud resources. By default, there is no option to get notified of CA policy changes. So, I decided to dig into the Audit logs and Graph API to get notifications, so you don’t have to log on to the Azure AD portal and check manually the log files. Also, you can inform the users without admin accounts like managers or a change manager so he/she can check if the change is registered and approved to execute.
 
 In this Github Article, I use an Azure Logic App to receive the notifications in Teams, but this solution can also be built via a Power Automate Flow.
 
@@ -25,26 +25,27 @@ Microsoft Graph Requirements:
 Conditional Access brings signals together, to make decisions, and enforce organizational policies. Azure AD Conditional Access is at the heart of the new identity-driven control plane. Conditional Access policies at their simplest are if-then statements.
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/ConditionalAccess.png)
 
-More information about Conditional Access can be found here -  https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview
+More information about Conditional Access can be found [here](https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview).
 
 ## What is an Azure Logic App? ##
 
 Azure Logic Apps is a cloud service that helps you schedule, automate, and orchestrate tasks, business processes, and workflows when you need to integrate apps, data, systems, and services across enterprises or organizations.
 
-More information about Azure Logic Apps can be found here - https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-overview
+More information about Azure Logic Apps can be found [here](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-overview).
 
 ## What are Adaptive Cards? ##
 
 Adaptive Cards are platform-agnostic snippets of UI, authored in JSON, that apps and services can openly exchange. When delivered to a specific app, the JSON is transformed into a native UI that automatically adapts to its surroundings. It helps design and integrate lightweight UI for all major platforms and frameworks.
+
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/Adaptive-Cards.png)
 
-More information about Adaptive cards can be found here - https://adaptivecards.io/#:~:text=Adaptive%20Cards%20are%20platform%2Dagnostic,all%20major%20platforms%20and%20frameworks.
+More information about Adaptive cards can be found [here](https://adaptivecards.io/#:~:text=Adaptive%20Cards%20are%20platform%2Dagnostic,all%20major%20platforms%20and%20frameworks.).
 
 ## Create an App Registration in Entra ID ##
 
-- Open https://azure.com/
+- Open [Azure](https://azure.com/)
 - Click on **Azure Entra ID**
-- Click on **App Registration** in the left menu (or use the following link https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps)
+- Click on **App Registration** in the left menu (or use the following [link](https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps).)
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/App-registration-Menu.png)
 - Click on **+ New registration**
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/AppRegistrations-NewRegistration.png)
@@ -91,21 +92,23 @@ Directory.Read.All
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/TeamsAdd-Confirmation.png)
 - Provide the **Incoming Webhook** a name and change the image if you wish, then click **Create**.
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/WebhookConfig.png)
+
 **Note:** This name will be displayed for every notification.
 - A Webhook URL will automatically be created, copy this URL because it is needed in the flow.
 - Click on **Done**
+
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/WebhookConfig-Confirm.png)
 
 ## Create an Azure Logic App for the Conditional Access Changes Notifications ##
 
 **Note:** Rename every Azure Logic App action to match the screenshots!
 
-- Open **https://portal.azure.com/**
+- Open [Azure](https://portal.azure.com/)
 - Search for **Logic Apps**
 - Click on **+ Add**
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/LogicApps-Add.png)
 - Select an existing **Resource Group** or create a new **Resource Group**
-- Select the **Instance Type** (I have chosen for Consumption, but check the Azure Calculator - (https://azure.microsoft.com/en-us/pricing/calculator/) which option fits your environment)
+- Select the **Instance Type** (I have chosen for Consumption, but check the [Azure Calculator](https://azure.microsoft.com/en-us/pricing/calculator/) which option fits your environment)
 - Select your region and click on **Review + Create**
 ![](https://github.com/ShadowITServices/Microsoft365/blob/main/Documentation/Images/LogicApp-Creation.png)
 - Check the details on the **Review + Create** page and click on **Create**
@@ -310,7 +313,7 @@ Expression: false
   "type": "message"
 }
 ```
-**Note:** More information about Adaptive cards designs can be found here: https://docs.microsoft.com/en-us/adaptive-cards/templating/
+**Note:** More information about Adaptive cards designs can be found [here](https://docs.microsoft.com/en-us/adaptive-cards/templating/)
 
 - Save the Logic App and Click on **Run Trigger**
 
